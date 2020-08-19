@@ -1,3 +1,7 @@
+
+const mongoose = require("mongoose")
+const usuario = mongoose.model("usuarios")
+
 exports.listAll =(req,res) => {
 		let usuarios = [
 		{
@@ -17,9 +21,16 @@ exports.listAll =(req,res) => {
 }
 
 exports.createOne =(req, res) => {
-		let response = {
-			message: "usuario cadastrado com sucesso",
-			data: req.body
+	const {nome, email} = req.body
+	let novoUsuario = new usuario({nome, email})
+	novoUsuario.save((error, usuario) => {
+		if (error) {
+			res.send(error)
 		}
-		res.send(response)
+		let response = {
+		message: "usuario cadastrado com sucesso",
+		data: usuario
 	}
+	res.send(response)
+	})
+}
