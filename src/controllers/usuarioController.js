@@ -1,23 +1,18 @@
 
 const mongoose = require("mongoose")
-const usuario = mongoose.model("usuarios")
+const usuario = mongoose.model("Usuarios")
 
 exports.listAll =(req,res) => {
-		let usuarios = [
-		{
-			nome: "teste01",
-			email: "teste@123.com"
-		},
-		{
-			nome: "teste02",
-			email: "teste@123.com"
-		},
-		{
-			nome: "teste03",
-			email: "teste@123.com"
+	usuario.find({}, (error, usuarios) => {
+		if (error){
+			res.send(error)
 		}
-	]
-	res.send(usuarios)
+		let response = {
+			message: "Listagem efetuada com sucesso",
+			data: usuarios
+		}
+		res.send(response)
+	})
 }
 
 exports.createOne =(req, res) => {
@@ -33,4 +28,46 @@ exports.createOne =(req, res) => {
 	}
 	res.send(response)
 	})
+}
+
+exports.showOne = (req, res) => {
+	usuario.findById(req.params.id, (error, usuario) =>{
+		if (error){
+			res.send(error)
+		}
+		let response = {
+		message: "usuario Encontrado com sucesso",
+		data: usuario
+	}
+	res.send(response)
+	})
+}
+
+exports.update = (req,res) => {
+	usuario.findOneAndUpdate(
+		{_id: req.params.id},
+		req.body,
+		{new: true},
+		(error, usuario) => {
+			if (error) {
+				res.send(error)
+			}
+			res.send(usuario)
+		}
+	)
+}
+
+exports.delete = (req,res) => {
+	usuario.remove(
+		{_id: req.params.id},
+		(error, usuario) => {
+			if (error) {
+				res.send(error)
+			}
+			let response = {
+				message: "usuario Deletado com sucesso",
+				data: usuario
+			}
+			res.send(response)
+		})
 }
