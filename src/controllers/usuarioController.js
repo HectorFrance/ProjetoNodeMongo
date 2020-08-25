@@ -15,9 +15,9 @@ exports.listAll =(req,res) => {
 	})
 }
 
-exports.createOne =(req, res) => {
-	const {nome, email} = req.body
-	let novoUsuario = new usuario({nome, email})
+exports.createOne = async (req, res) => {
+	const {nome, email, listas} = req.body
+	let novoUsuario = await new usuario({nome, email, listas})
 	novoUsuario.save((error, usuario) => {
 		if (error) {
 			res.send(error)
